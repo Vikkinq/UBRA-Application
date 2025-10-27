@@ -12,16 +12,21 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // Routes
+const authentication_route = require("./routes/auth_route");
 
+// Constant Variables
 const app = express();
+
+// Static Logic
+app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(passport.initialize());
 
-// Static Logic
-app.use(express.static(path.join(__dirname, "public")));
+// Middleware
+const ExpressError = require("./middleware/ExpressError");
 
 // MongoDB Connection
 // const mongo_url = process.env.MONGO_ATLAS || "mongodb://127.0.0.1:27017/2_MERN_UBRA";
@@ -37,10 +42,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // App Servers
+app.use("/api/auth", authentication_route);
 
 // No Path Error Handler
 app.use((req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
+});
+
+// Data Error Handler
+app.use((err, req, res, next) => {
+  let { statusCode = 500, message = "Oh no! Something Went Wrong!!" } = err;
+  const response = { success: false, message };
+
+  if (process.env.NODE_ENV !== "production") {
+    response.stack = err.stack; // show stacktrace for debugging
+  }
+
+  res.status(statusCode).json(response);
 });
 
 const PORT = process.env.PORT || 5000;
