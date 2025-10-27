@@ -13,6 +13,7 @@ const cors = require("cors");
 
 // Routes
 const authentication_route = require("./routes/auth_route");
+const job_route = require("./routes/job_route");
 
 // Constant Variables
 const app = express();
@@ -43,6 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // App Servers
 app.use("/api/auth", authentication_route);
+app.use("/api/job", job_route);
 
 // No Path Error Handler
 app.use((req, res, next) => {

@@ -9,6 +9,7 @@ const ExpressError = require("../middleware/ExpressError");
 
 // Error Handler
 const getToken = require("../utilities/getToken");
+const { verifyUser } = require("../middleware/user_validations");
 
 router.post("/signup", async (req, res, next) => {
   try {
@@ -63,6 +64,29 @@ router.post("/login", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+// Google OAuth
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+router.get("/google/callback", passport.authenticate("google", { session: false }), async (req, res, next) => {
+  try {
+    const user = req.user;
+    const token = generateToken(user);
+    res.cookie("token", token, { httpOnly: true });
+    res.redirect(`http://localhost:5173/`);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/current", verifyUser, (req, res) => {
+  res.json({ user: req.user });
 });
 
 module.exports = router;
