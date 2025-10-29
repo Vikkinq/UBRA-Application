@@ -29,7 +29,7 @@ export default function LoginForm() {
 
       console.log("Logged in", res.data);
 
-      // ✅ Save token + user
+      // Save token + user
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 

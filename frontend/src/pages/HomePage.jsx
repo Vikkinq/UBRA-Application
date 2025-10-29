@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Sidebar from "../components/Global/SideBar";
+import MobileNav from "../components/Global/MobileNav";
 import { SearchIcon, FilterIcon } from "lucide-react";
 
 import StatusCards from "../components/Home/StatusCards";
@@ -8,6 +9,7 @@ import JobSection from "../components/Home/JobSection";
 
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -29,7 +31,7 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen bg-[#ffffff] text-[#1E293B]">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       {/* Main */}
       <main className="flex-1 overflow-y-auto px-8 py-6">
@@ -58,6 +60,7 @@ export default function HomePage() {
         {/* Job Cards Grid */}
         <JobSection jobDatas={jobList} />
       </main>
+      <MobileNav onMenuToggle={() => setMobileOpen(true)} />
     </div>
   );
 }
