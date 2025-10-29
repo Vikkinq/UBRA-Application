@@ -1,12 +1,12 @@
 export default function JobLists({ JobLists }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 p-4 flex flex-col justify-between">
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 p-4 flex flex-col justify-between hover:cursor-pointer">
       {/* Header */}
       <div>
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-2 ">
           <div>
-            <h3 className="text-sm font-semibold text-[#004030] leading-tight">{JobLists.company}</h3>
-            <p className="text-xs text-gray-500">{JobLists.role}</p>
+            <h3 className="text-md font-bold text-[#004030] leading-tight">{JobLists.company}</h3>
+            <p className="text-xs font-semibold text-gray-500">{JobLists.role}</p>
           </div>
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold text-white shadow`}

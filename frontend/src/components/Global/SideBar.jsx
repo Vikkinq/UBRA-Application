@@ -6,7 +6,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`${open ? "w-64" : "w-20"} h-screen bg-[#1B3C53] text-white flex flex-col transition-all duration-300`}
+      className={`${open ? "w-64" : "w-20"} h-screen bg-[#1E293B] text-white flex flex-col transition-all duration-300`}
     >
       {/* Header / Logo */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-[#4A9782]/40">

@@ -1,6 +1,6 @@
 export default function StatusCards({ statusData }) {
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-10">
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-10 hover:cursor-pointer">
       {[
         { title: "Applied", count: 12, color: "#004030" },
         { title: "Pending Interview", count: 3, color: "#4A9782" },
