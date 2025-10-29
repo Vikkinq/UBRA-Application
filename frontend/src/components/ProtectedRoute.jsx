@@ -1,13 +1,20 @@
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
 
 function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
+  const [isAuth, setIsAuth] = useState(null);
 
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    axios
+      .get("/api/auth/current", { withCredentials: true })
+      .then(() => setIsAuth(true))
+      .catch(() => setIsAuth(false));
+  }, []);
 
-  return children;
+  if (isAuth === null) return <div>Loading...</div>;
+
+  return isAuth ? children : <Navigate to="/login" />;
 }
 
 export default ProtectedRoute;
