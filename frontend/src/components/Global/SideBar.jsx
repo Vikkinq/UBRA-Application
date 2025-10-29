@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { HomeIcon, BriefcaseIcon, BarChartIcon, SettingsIcon, LogOutIcon, MenuIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -18,6 +20,17 @@ export default function Sidebar() {
 
     fetchCurrentUser();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/auth/logout", {}, { withCredentials: true });
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
     <aside
@@ -60,17 +73,17 @@ export default function Sidebar() {
 
       {/* Footer / Logout */}
       <div className="px-5 py-4 border-t border-[#4A9782]/40">
-        <SidebarLink open={open} icon={<LogOutIcon />} label="Logout" />
+        <SidebarLink open={open} icon={<LogOutIcon />} label="Logout" onClick={handleLogout} />
       </div>
     </aside>
   );
 }
 
-function SidebarLink({ icon, label, open }) {
+function SidebarLink({ icon, label, open, onClick }) {
   return (
-    <a
-      href="#"
-      className="flex items-center gap-3 px-5 py-3 text-sm font-medium text-[#FFF9E5] hover:bg-[#4A9782]/30 transition rounded-lg mx-2"
+    <button
+      onClick={onClick}
+      className="flex items-center gap-3 px-5 py-3 text-sm font-medium text-[#FFF9E5] hover:bg-[#4A9782]/30 transition rounded-lg mx-2 w-full text-left"
     >
       <span className="w-5 h-5">{icon}</span>
       <span
@@ -80,6 +93,6 @@ function SidebarLink({ icon, label, open }) {
       >
         {label}
       </span>
-    </a>
+    </button>
   );
 }

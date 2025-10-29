@@ -67,6 +67,15 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
 // Google OAuth
 router.get(
   "/google",
