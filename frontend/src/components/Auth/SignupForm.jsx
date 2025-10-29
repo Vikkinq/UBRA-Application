@@ -6,6 +6,7 @@ import axios from "axios";
 import GoogleButton from "./GoogleButton";
 
 export default function SignupForm() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -21,6 +22,19 @@ export default function SignupForm() {
     }));
   };
 
+  const handleSignUp = async (evt) => {
+    evt.preventDefault();
+
+    try {
+      const res = await axios.post("/api/auth/signup", user);
+
+      console.log("Successfully Created Account:", res.data);
+      navigate("/"); // redirect after success
+    } catch (err) {
+      console.error("Signup Error:", err.response?.data || err.message);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
@@ -32,13 +46,15 @@ export default function SignupForm() {
         </div>
 
         {/* Form */}
-        <form className="space-y-4">
+        <form onSubmit={handleSignUp} className="space-y-4">
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
             <input
+              value={user.name}
+              onChange={handleChange}
               type="text"
-              name="username"
+              name="name"
               placeholder="John Doe"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
@@ -48,6 +64,8 @@ export default function SignupForm() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
+              value={user.email}
+              onChange={handleChange}
               type="email"
               name="email"
               placeholder="@example.com"
@@ -62,12 +80,33 @@ export default function SignupForm() {
               type="password"
               name="password"
               placeholder="Enter password"
+              value={user.password}
+              onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
           </div>
 
+          {/* Confirm Password */}
+          <div className="mt-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm password"
+              value={user.confirmPassword}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+            />
+
+            {/* Show error only if both fields are filled and don't match */}
+            {user.confirmPassword && user.password !== user.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">Passwords must match</p>
+            )}
+          </div>
+
           {/* Submit Button */}
           <button
+            disabled={!user.email || !user.password || user.password !== user.confirmPassword}
             type="submit"
             className="w-full bg-indigo-600 text-white font-semibold rounded-lg py-2.5 hover:bg-indigo-700 transition cursor-pointer"
           >

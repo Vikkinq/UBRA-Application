@@ -16,6 +16,7 @@ router.post("/signup", async (req, res, next) => {
     const { name, email, password } = req.body;
     const userExists = await User.findOne({ email });
     if (userExists) {
+      console.log("User already Exists");
       return next(new ExpressError("User already Exists", 400));
     }
 
@@ -77,7 +78,7 @@ router.get(
 router.get("/google/callback", passport.authenticate("google", { session: false }), async (req, res, next) => {
   try {
     const user = req.user;
-    const token = generateToken(user);
+    const token = getToken(user);
     res.cookie("token", token, { httpOnly: true });
     res.redirect(`http://localhost:5173/`);
   } catch (err) {
