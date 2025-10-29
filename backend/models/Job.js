@@ -32,6 +32,11 @@ const jobSchema = new Schema(
       enum: ["Top Choice", "Consider", "Neutral"],
       default: "Neutral",
     },
+    types: {
+      type: String,
+      enum: ["Tech Company", "Non Tech Company", "Government", "Other"],
+      default: "Other",
+    },
     notes: {
       type: String,
     },

@@ -15,7 +15,7 @@ router.get("/data", async (req, res, next) => {
 
 router.post("/data/create", async (req, res, next) => {
   try {
-    const { owner, company, role, platform, status, priority, notes } = req.body;
+    const { owner, company, role, platform, status, priority, notes, types } = req.body;
     const jobData = new Job({
       userId: owner,
       company,
@@ -23,6 +23,7 @@ router.post("/data/create", async (req, res, next) => {
       platform,
       status,
       priority,
+      types,
       notes,
     });
 
