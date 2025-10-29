@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { TextField, Button, Divider } from "@mui/material";
 
 import GoogleButton from "./GoogleButton";
 
@@ -13,6 +12,14 @@ export default function SignupForm() {
     password: "",
     confirmPassword: "",
   });
+
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -43,7 +50,7 @@ export default function SignupForm() {
             <input
               type="email"
               name="email"
-              placeholder="you@example.com"
+              placeholder="@example.com"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
           </div>
@@ -54,7 +61,7 @@ export default function SignupForm() {
             <input
               type="password"
               name="password"
-              placeholder="••••••••"
+              placeholder="Enter password"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
           </div>
