@@ -41,14 +41,15 @@ export default function Sidebar() {
       >
         {/* Header / Logo */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#4A9782]/40">
-          <h1
-            className={`font-bold text-xl tracking-wide text-[#DCD0A8] transition-all duration-300 ${
-              !open && "opacity-0 scale-0"
+          <div
+            className={`flex items-center transition-all duration-300 ${
+              open ? "opacity-100 scale-100" : "opacity-0 scale-0 w-0"
             }`}
           >
-            UBRA
-          </h1>
-          <button onClick={() => setOpen(!open)} className="p-2 hover:bg-[#00674f] rounded-lg transition">
+            <h1 className="font-bold text-xl tracking-wide text-[#DCD0A8] whitespace-nowrap">UBRA</h1>
+          </div>
+
+          <button onClick={() => setOpen(!open)} className="p-2 hover:bg-[#00674f] rounded-lg transition ml-auto">
             <MenuIcon className="w-6 h-6 text-[#DCD0A8]" />
           </button>
         </div>
