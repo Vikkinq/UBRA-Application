@@ -8,9 +8,12 @@ import StatusCards from "../components/Home/StatusCards";
 import JobSection from "../components/Home/JobSection";
 import DashboardHeader from "../components/Home/Header";
 
+import AddJobModal from "../components/Home/AddJobModal";
+
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     try {
@@ -36,11 +39,13 @@ export default function HomePage() {
 
       {/* Main */}
       <main className="flex-1 overflow-y-auto px-8 py-6">
-        <DashboardHeader />
+        <DashboardHeader onAddClick={() => setOpenModal(true)} />
         <StatusCards />
         <JobSection jobDatas={jobList} />
+
+        {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} />}
       </main>
-      <MobileNav onMenuToggle={() => setMobileOpen(true)} />
+      <MobileNav onMenuToggle={() => setMobileOpen(true)} onAddClick={() => setOpenModal(true)} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { SearchIcon, FilterIcon, PlusIcon } from "lucide-react";
 
-export default function DashboardHeader({ username }) {
+export default function DashboardHeader({ username, onAddClick }) {
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       {/* Title */}
@@ -25,7 +25,10 @@ export default function DashboardHeader({ username }) {
         </button>
 
         {/* Add Job Button */}
-        <button className="hidden md:flex items-center justify-center gap-2 bg-[#004030] text-white px-4 py-2 rounded-lg hover:bg-[#00674f] transition shadow-md active:scale-95">
+        <button
+          onClick={onAddClick}
+          className="hidden md:flex items-center justify-center gap-2 bg-[#004030] text-white px-4 py-2 rounded-lg hover:bg-[#00674f] transition shadow-md active:scale-95"
+        >
           <PlusIcon className="w-5 h-5" />
           <span className="font-medium">Add Job</span>
         </button>
