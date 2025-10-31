@@ -15,21 +15,18 @@ export default function HomePage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
+  const fetchJobs = async () => {
     try {
-      const fetchJobs = async () => {
-        try {
-          const res = await fetch("/api/job/data");
-          const jobData = await res.json();
-          setJobList(jobData);
-        } catch (err) {
-          console.log("Failed to fetch Jobs", err);
-        }
-      };
-      fetchJobs();
+      const res = await fetch("/api/job/data");
+      const jobData = await res.json();
+      setJobList(jobData);
     } catch (err) {
-      console.log("An Error has Occured", err);
+      console.log("Failed to fetch Jobs", err);
     }
+  };
+
+  useEffect(() => {
+    fetchJobs();
   }, []);
 
   return (
@@ -43,7 +40,7 @@ export default function HomePage() {
         <StatusCards />
         <JobSection jobDatas={jobList} />
 
-        {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} />}
+        {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} onJobAdded={fetchJobs} />}
       </main>
       <MobileNav onMenuToggle={() => setMobileOpen(true)} onAddClick={() => setOpenModal(true)} />
     </div>

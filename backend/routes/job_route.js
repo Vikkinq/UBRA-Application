@@ -4,8 +4,11 @@ const router = express.Router();
 const Job = require("../models/Job");
 const User = require("../models/User");
 
-router.get("/data", async (req, res, next) => {
+const { verifyUser } = require("../middleware/user_validations");
+
+router.get("/data", verifyUser, async (req, res, next) => {
   try {
+    // console.log("Decoded User: ", req.user.id);
     const jobList = await Job.find();
     res.json(jobList);
   } catch (err) {
@@ -13,11 +16,11 @@ router.get("/data", async (req, res, next) => {
   }
 });
 
-router.post("/data/create", async (req, res, next) => {
+router.post("/data", verifyUser, async (req, res, next) => {
   try {
-    const { owner, company, role, platform, status, priority, notes, types } = req.body;
+    const { company, role, platform, status, priority, notes, types } = req.body;
     const jobData = new Job({
-      userId: owner,
+      userId: req.user.id,
       company,
       role,
       platform,
@@ -40,7 +43,7 @@ router.post("/data/create", async (req, res, next) => {
   }
 });
 
-router.put("/:id/data", async (req, res, next) => {
+router.put("/:id/data", verifyUser, async (req, res, next) => {
   try {
     const id = req.params.id;
     const findJob = await Job.findByIdAndUpdate(id, req.body, {
@@ -63,7 +66,7 @@ router.put("/:id/data", async (req, res, next) => {
   }
 });
 
-router.delete("/:id/data/delete", async (req, res, next) => {
+router.delete("/:id/data/delete", verifyUser, async (req, res, next) => {
   try {
     const id = req.params.id;
     const deleteJob = await Job.findByIdAndDelete(id);

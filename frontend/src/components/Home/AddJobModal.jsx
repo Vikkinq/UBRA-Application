@@ -1,6 +1,55 @@
-import { X } from "lucide-react";
+import { useState, useEffect } from "react";
 
-export default function AddJobModal({ onClose }) {
+import { useNavigate } from "react-router-dom";
+
+import { X } from "lucide-react";
+import { useFormHandler } from "../../utilities/formHandlers";
+
+export default function AddJobModal({ onClose, onJobAdded }) {
+  const navigate = useNavigate();
+  const { formData, handleChange, resetForm } = useFormHandler({
+    company: "",
+    role: "",
+    platform: "",
+    status: "",
+    priority: "",
+    types: "",
+    notes: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/job/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // ✅ sends cookies
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("❌ Failed:", data.message || "Unknown error");
+        return;
+      }
+
+      console.log("✅ Success:", data);
+
+      // Optionally reset form
+      resetForm();
+
+      // Redirect after success
+      if (res.ok) {
+        onClose(); // close modal
+        onJobAdded(); // refresh list in HomePage
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
       {/* Modal container */}
@@ -14,12 +63,15 @@ export default function AddJobModal({ onClose }) {
         </div>
 
         {/* Form */}
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Row 1: Company + Role */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
               <input
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
                 type="text"
                 placeholder="e.g. Google Philippines"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#4A9782] outline-none"
@@ -29,6 +81,9 @@ export default function AddJobModal({ onClose }) {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Role / Position</label>
               <input
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
                 type="text"
                 placeholder="e.g. Junior Software Developer"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#4A9782] outline-none"
@@ -40,7 +95,15 @@ export default function AddJobModal({ onClose }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Platform</label>
-              <select className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none">
+              <select
+                name="platform"
+                value={formData.platform}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none"
+              >
+                <option value="" disabled hidden>
+                  -----
+                </option>
                 <option>Email</option>
                 <option>JobStreet</option>
                 <option>LinkedIn</option>
@@ -51,7 +114,15 @@ export default function AddJobModal({ onClose }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none">
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none"
+              >
+                <option value="" disabled hidden>
+                  -----
+                </option>
                 <option>Applied</option>
                 <option>Interview Scheduled</option>
                 <option>Offer Received</option>
@@ -66,7 +137,15 @@ export default function AddJobModal({ onClose }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-              <select className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none">
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none"
+              >
+                <option value="" disabled hidden>
+                  -----
+                </option>
                 <option>Top Choice</option>
                 <option>Consider</option>
                 <option>Neutral</option>
@@ -75,7 +154,15 @@ export default function AddJobModal({ onClose }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-              <select className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none">
+              <select
+                name="types"
+                value={formData.types}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#4A9782] outline-none"
+              >
+                <option value="" disabled hidden>
+                  -----
+                </option>
                 <option>Tech Company</option>
                 <option>Non Tech Company</option>
                 <option>Government</option>
@@ -88,6 +175,9 @@ export default function AddJobModal({ onClose }) {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
             <textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
               rows="3"
               placeholder="Add some notes about this job..."
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#4A9782] outline-none resize-none"

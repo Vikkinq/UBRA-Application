@@ -15,7 +15,8 @@ module.exports.verifyUser = async (req, res, next) => {
   }
 };
 
-module.exports.isLoggedIn = async (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) return res.status(401).json({ message: "No Token" });
-};
+// module.exports.isLoggedIn = (req, res, next) => {
+//   const token = req.cookies.token;
+//   if (!token) return res.status(401).json({ message: "No Token" });
+//   next();
+// };
