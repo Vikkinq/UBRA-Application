@@ -8,7 +8,7 @@ import StatusCards from "../components/Home/StatusCards";
 import JobSection from "../components/Home/JobSection";
 import DashboardHeader from "../components/Home/Header";
 
-import AddJobModal from "../components/Home/AddJobModal";
+import AddJobModal from "../components/Home/Modal/AddJobModal";
 
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);

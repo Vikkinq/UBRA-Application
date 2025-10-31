@@ -1,3 +1,5 @@
+import { Pencil } from "lucide-react";
+
 export default function JobLists({ JobLists }) {
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 p-4 flex flex-col justify-between hover:cursor-pointer">
