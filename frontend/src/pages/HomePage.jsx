@@ -9,11 +9,14 @@ import JobSection from "../components/Home/JobSection";
 import DashboardHeader from "../components/Home/Header";
 
 import AddJobModal from "../components/Home/Modal/AddJobModal";
+import UpdateJobModal from "../components/Home/Modal/UpdateJobModal";
 
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const fetchJobs = async () => {
     try {
@@ -29,6 +32,16 @@ export default function HomePage() {
     fetchJobs();
   }, []);
 
+  const handleOpenModal = (job) => {
+    setSelectedJob(job);
+    setUpdateModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedJob(null);
+    setUpdateModal(false);
+  };
+
   return (
     <div className="flex min-h-screen bg-[#ffffff] text-[#1E293B]">
       {/* Sidebar */}
@@ -38,9 +51,10 @@ export default function HomePage() {
       <main className="flex-1 overflow-y-auto px-8 py-6">
         <DashboardHeader onAddClick={() => setOpenModal(true)} />
         <StatusCards />
-        <JobSection jobDatas={jobList} />
+        <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} />
 
         {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} onJobAdded={fetchJobs} />}
+        {updateModal && <UpdateJobModal jobDatas={selectedJob} onClose={handleCloseModal} onJobUpdate={fetchJobs} />}
       </main>
       <MobileNav onMenuToggle={() => setMobileOpen(true)} onAddClick={() => setOpenModal(true)} />
     </div>

@@ -1,6 +1,6 @@
 import { SearchIcon, FilterIcon, PlusIcon } from "lucide-react";
 
-export default function DashboardHeader({ username, onAddClick }) {
+export default function DashboardHeader({ username, onAddClick}) {
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       {/* Title */}
