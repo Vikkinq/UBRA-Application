@@ -10,7 +10,7 @@ export default function JobSection({ jobDatas, onUpdateClick }) {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {jobDatas.map((job, i) => (
-          <JobLists key={i} JobLists={job} onClick={() => onJobClick(job)} />
+          <JobLists key={i} JobLists={job} onClick={() => onUpdateClick(job)} />
         ))}
       </div>
     </section>

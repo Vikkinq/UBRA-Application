@@ -7,7 +7,7 @@ import { useFormHandler } from "../../../utilities/formHandlers";
 
 export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
   const navigate = useNavigate();
-  const { formData, handleChange, resetForm } = useFormHandler({
+  const { formData, handleChange, resetForm, setFormData } = useFormHandler({
     company: "",
     role: "",
     platform: "",
@@ -17,17 +17,42 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
     notes: "",
   });
 
+  useEffect(() => {
+    if (jobDatas) {
+      setFormData({
+        company: jobDatas.company || "",
+        role: jobDatas.role || "",
+        platform: jobDatas.platform || "",
+        status: jobDatas.status || "",
+        priority: jobDatas.priority || "",
+        types: jobDatas.types || "",
+        notes: jobDatas.notes || "",
+      });
+    }
+  }, [jobDatas, setFormData]);
+
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
     try {
-      const res = await fetch(`/api/job/${job._id}`, {
+      const res = await fetch(`/api/job/${jobDatas._id}/data`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      refreshJobs(); // refetch data
-      onClose(); // close modal
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("❌ Failed:", data.message || "Unknown error");
+        return;
+      }
+
+      console.log("✅ Success:", data);
+
+      if (res.ok) {
+        onJobUpdate();
+        onClose();
+      }
     } catch (err) {
       console.error("Error:", err);
     }

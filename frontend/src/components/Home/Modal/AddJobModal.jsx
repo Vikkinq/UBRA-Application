@@ -36,14 +36,10 @@ export default function AddJobModal({ onClose, onJobAdded }) {
       }
 
       console.log("✅ Success:", data);
-
-      // Optionally reset form
       resetForm();
-
-      // Redirect after success
       if (res.ok) {
-        onClose(); // close modal
-        onJobAdded(); // refresh list in HomePage
+        onClose();
+        onJobAdded();
       }
     } catch (err) {
       console.error("Error:", err);
