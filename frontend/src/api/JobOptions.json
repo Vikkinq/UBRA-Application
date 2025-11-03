@@ -1,0 +1,6 @@
+{
+  "PLATFORM": ["Email", "JobStreet", "LinkedIn", "Referral", "Other"],
+  "STATUS": ["Applied", "Interview Scheduled", "Offer Received", "Offer Accepted", "Rejected", "Withdrawn"],
+  "PRIORITY": ["Top Choice", "Consider", "Neutral"],
+  "TYPES": ["Tech Company", "Non Tech Company", "Government", "Other"]
+}

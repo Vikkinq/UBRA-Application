@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { X, Trash2 } from "lucide-react";
 import { useFormHandler } from "../../../utilities/formHandlers";
 
-export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
+import JobOptions from "../../../api/JobOptions.json";
+
+export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate, onDelete }) {
   const navigate = useNavigate();
   const { formData, handleChange, resetForm, setFormData } = useFormHandler({
     company: "",
@@ -58,6 +60,28 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`/api/job/${jobDatas._id}/data/delete`, { method: "DELETE" });
+      onDelete((prev) => prev.filter((t) => t._id !== jobDatas.id));
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("❌ Failed:", data.message || "Unknown error");
+        return;
+      }
+
+      console.log("Successfully Deleted", data);
+
+      if (res.ok) {
+        onJobUpdate();
+        onClose();
+      }
+    } catch (err) {
+      console.error("Error", err);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-3">
       <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl p-5 sm:p-6 border border-gray-100 animate-fade-in">
@@ -99,11 +123,11 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#004030] focus:border-[#004030] outline-none"
               >
                 <option value="">Select...</option>
-                <option value="Email">Email</option>
-                <option value="JobStreet">JobStreet</option>
-                <option value="LinkedIn">LinkedIn</option>
-                <option value="Referral">Referral</option>
-                <option value="Other">Other</option>
+                {JobOptions.PLATFORM.map((o, i) => (
+                  <option key={i} value={o}>
+                    {o}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -116,12 +140,11 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#004030] focus:border-[#004030] outline-none"
               >
                 <option value="">Select...</option>
-                <option value="Applied">Applied</option>
-                <option value="Interview Scheduled">Interview Scheduled</option>
-                <option value="Offer Received">Offer Received</option>
-                <option value="Offer Accepted">Offer Accepted</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Withdrawn">Withdrawn</option>
+                {JobOptions.STATUS.map((o, i) => (
+                  <option key={i} value={o}>
+                    {o}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -134,9 +157,11 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#004030] focus:border-[#004030] outline-none"
               >
                 <option value="">Select...</option>
-                <option value="Top Choice">Top Choice</option>
-                <option value="Consider">Consider</option>
-                <option value="Neutral">Neutral</option>
+                {JobOptions.PRIORITY.map((o, i) => (
+                  <option key={i} value={o}>
+                    {o}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -149,10 +174,11 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#004030] focus:border-[#004030] outline-none"
               >
                 <option value="">Select...</option>
-                <option value="Tech Company">Tech Company</option>
-                <option value="Non Tech Company">Non Tech Company</option>
-                <option value="Government">Government</option>
-                <option value="Other">Other</option>
+                {JobOptions.TYPES.map((o, i) => (
+                  <option key={i} value={o}>
+                    {o}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -172,6 +198,7 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate }) {
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4">
             <button
+              onClick={handleDelete}
               type="button"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-red-600 border border-red-300 hover:bg-red-50 transition active:scale-95 w-full sm:w-auto justify-center"
             >

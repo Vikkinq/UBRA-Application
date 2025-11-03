@@ -54,7 +54,14 @@ export default function HomePage() {
         <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} />
 
         {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} onJobAdded={fetchJobs} />}
-        {updateModal && <UpdateJobModal jobDatas={selectedJob} onClose={handleCloseModal} onJobUpdate={fetchJobs} />}
+        {updateModal && (
+          <UpdateJobModal
+            jobDatas={selectedJob}
+            onClose={handleCloseModal}
+            onJobUpdate={fetchJobs}
+            onDelete={setJobList}
+          />
+        )}
       </main>
       <MobileNav onMenuToggle={() => setMobileOpen(true)} onAddClick={() => setOpenModal(true)} />
     </div>
