@@ -15,6 +15,17 @@ module.exports.verifyUser = async (req, res, next) => {
   }
 };
 
+module.exports.validateJob = (req, res, next) => {
+  const { error } = jobValidationSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return res.status(400).json({
+      message: "Validation error",
+      details: error.details.map((d) => d.message),
+    });
+  }
+  next();
+};
+
 // module.exports.isLoggedIn = (req, res, next) => {
 //   const token = req.cookies.token;
 //   if (!token) return res.status(401).json({ message: "No Token" });
