@@ -9,7 +9,7 @@ const { verifyUser } = require("../middleware/user_validations");
 router.get("/data", verifyUser, async (req, res, next) => {
   try {
     // console.log("Decoded User: ", req.user.id);
-    const jobList = await Job.find();
+    const jobList = await Job.find({ userId: req.user._id });
     res.json(jobList);
   } catch (err) {
     next(err);
