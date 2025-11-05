@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const rateLimit = require("express-rate-limit");
 
 module.exports.verifyUser = async (req, res, next) => {
   const token = req.cookies.token;
@@ -15,16 +16,18 @@ module.exports.verifyUser = async (req, res, next) => {
   }
 };
 
-module.exports.validateJob = (req, res, next) => {
-  const { error } = jobValidationSchema.validate(req.body, { abortEarly: false });
-  if (error) {
-    return res.status(400).json({
-      message: "Validation error",
-      details: error.details.map((d) => d.message),
-    });
-  }
-  next();
-};
+module.exports.loginLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 10,
+  statusCode: 429,
+  message: {
+    success: false,
+    error: "Too many login attempts. Please try again after 10 minutes.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req, res) => req.body.email || rateLimit.ipKeyGenerator(req),
+});
 
 // module.exports.isLoggedIn = (req, res, next) => {
 //   const token = req.cookies.token;

@@ -27,10 +27,15 @@ const Joi = BaseJoi.extend(extension);
 // ✅ User Validation Schema
 const userValidationSchema = Joi.object({
   name: Joi.string().trim().required().escapeHTML(),
-  email: Joi.string().email().required().escapeHTML(),
+  email: Joi.string().trim().email().required().escapeHTML(),
   googleId: Joi.string().optional().allow(null, "").escapeHTML(),
   password: Joi.string().min(6).optional().allow(null, "").escapeHTML(),
-  picture: Joi.string().uri().optional(),
+  picture: Joi.string()
+    .uri()
+    .optional()
+    .default(
+      "https://static.vecteezy.com/system/resources/previews/026/619/142/original/default-avatar-profile-icon-of-social-media-user-photo-image-vector.jpg"
+    ),
 });
 
 // ✅ Job Validation Schema

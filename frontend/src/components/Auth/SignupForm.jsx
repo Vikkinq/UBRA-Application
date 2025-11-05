@@ -25,8 +25,15 @@ export default function SignupForm() {
   const handleSignUp = async (evt) => {
     evt.preventDefault();
 
+    const { name, email, password } = user;
+
+    if (user.password !== user.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
     try {
-      const res = await axios.post("/api/auth/signup", user);
+      const res = await axios.post("/api/auth/signup", { name, email, password });
 
       console.log("Successfully Created Account:", res.data);
       navigate("/"); // redirect after success

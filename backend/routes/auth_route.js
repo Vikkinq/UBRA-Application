@@ -9,9 +9,11 @@ const ExpressError = require("../middleware/ExpressError");
 
 // Error Handler
 const getToken = require("../utilities/getToken");
-const { verifyUser } = require("../middleware/user_validations");
+const { verifyUser, loginLimiter } = require("../middleware/user_validations");
+const { userValidationSchema } = require("../middleware/ValidationSchema");
+const { validateBody } = require("../middleware/GlobalMiddleware");
 
-router.post("/signup", async (req, res, next) => {
+router.post("/signup", validateBody(userValidationSchema), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userExists = await User.findOne({ email });
@@ -36,7 +38,7 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", loginLimiter, async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
