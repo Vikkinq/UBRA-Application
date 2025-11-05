@@ -39,11 +39,6 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    fetchJobs();
-    fetchStatsData();
-  }, []);
-
   const handleOpenModal = (job) => {
     setSelectedJob(job);
     setUpdateModal(true);
@@ -53,6 +48,11 @@ export default function HomePage() {
     setSelectedJob(null);
     setUpdateModal(false);
   };
+
+  useEffect(() => {
+    fetchJobs();
+    fetchStatsData();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#ffffff] text-[#1E293B]">
@@ -65,7 +65,14 @@ export default function HomePage() {
         <StatusCards statusData={stats} />
         <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} />
 
-        {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} onJobAdded={fetchJobs} />}
+        {openModal && (
+          <AddJobModal
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            onJobAdded={fetchJobs}
+            statsUpdate={fetchStatsData}
+          />
+        )}
         {updateModal && (
           <UpdateJobModal
             jobDatas={selectedJob}

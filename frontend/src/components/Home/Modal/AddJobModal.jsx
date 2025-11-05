@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import { useFormHandler } from "../../../utilities/formHandlers";
 
-export default function AddJobModal({ onClose, onJobAdded }) {
+export default function AddJobModal({ onClose, onJobAdded, statsUpdate }) {
   const navigate = useNavigate();
   const { formData, handleChange, resetForm } = useFormHandler({
     company: "",
@@ -40,6 +40,7 @@ export default function AddJobModal({ onClose, onJobAdded }) {
       if (res.ok) {
         onClose();
         onJobAdded();
+        statsUpdate();
       }
     } catch (err) {
       console.error("Error:", err);
