@@ -9,4 +9,6 @@ router.post("/data", verifyUser, JobController.CreateJob);
 router.put("/:id/data", verifyUser, JobController.UpdateJob);
 router.delete("/:id/data/delete", verifyUser, JobController.DeleteJob);
 
+router.get("/data/stats", verifyUser, JobController.GetJobStats);
+
 module.exports = router;

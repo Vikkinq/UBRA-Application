@@ -80,9 +80,48 @@ const DeleteJob = async (req, res, next) => {
   }
 };
 
+const GetJobStats = async (req, res, next) => {
+  try {
+    const stats = await Job.aggregate([
+      { $match: { userId: req.user._id } },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const jobCount = await Job.countDocuments({ userId: req.user._id });
+
+    // Convert to object for quick lookup
+    const formatted = stats.reduce((acc, cur) => {
+      acc[cur._id] = cur.count;
+      return acc;
+    }, {});
+
+    // Define all possible statuses
+    const allStatuses = ["Applied", "Interview Scheduled", "Offer Received", "Offer Accepted", "Rejected", "Withdrawn"];
+
+    // Ensure every status exists, even if count = 0
+    const completedStats = allStatuses.map((status) => ({
+      title: status,
+      count:
+        status === "Applied"
+          ? jobCount // 👈 put total job count here
+          : formatted[status] || 0,
+    }));
+
+    res.json(completedStats);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   RenderJob,
   CreateJob,
   UpdateJob,
   DeleteJob,
+  GetJobStats,
 };

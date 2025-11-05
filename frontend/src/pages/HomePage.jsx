@@ -13,6 +13,7 @@ import UpdateJobModal from "../components/Home/Modal/UpdateJobModal";
 
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
+  const [stats, setStats] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -28,8 +29,19 @@ export default function HomePage() {
     }
   };
 
+  const fetchStatsData = async () => {
+    try {
+      const res = await fetch("/api/job/data/stats");
+      const statsData = await res.json();
+      setStats(statsData);
+    } catch (err) {
+      console.log("Failed to Fetch Status Data", err);
+    }
+  };
+
   useEffect(() => {
     fetchJobs();
+    fetchStatsData();
   }, []);
 
   const handleOpenModal = (job) => {
@@ -50,7 +62,7 @@ export default function HomePage() {
       {/* Main */}
       <main className="flex-1 overflow-y-auto px-8 py-6">
         <DashboardHeader onAddClick={() => setOpenModal(true)} />
-        <StatusCards />
+        <StatusCards statusData={stats} />
         <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} />
 
         {openModal && <AddJobModal open={openModal} onClose={() => setOpenModal(false)} onJobAdded={fetchJobs} />}
@@ -60,6 +72,7 @@ export default function HomePage() {
             onClose={handleCloseModal}
             onJobUpdate={fetchJobs}
             onDelete={setJobList}
+            statsUpdate={fetchStatsData}
           />
         )}
       </main>

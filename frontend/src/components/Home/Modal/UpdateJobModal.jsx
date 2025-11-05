@@ -7,7 +7,7 @@ import { useFormHandler } from "../../../utilities/formHandlers";
 
 import JobOptions from "../../../api/JobOptions.json";
 
-export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate, onDelete }) {
+export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate, onDelete, statsUpdate }) {
   const navigate = useNavigate();
   const { formData, handleChange, resetForm, setFormData } = useFormHandler({
     company: "",
@@ -53,6 +53,7 @@ export default function UpdateJobModal({ jobDatas, onClose, onJobUpdate, onDelet
 
       if (res.ok) {
         onJobUpdate();
+        statsUpdate();
         onClose();
       }
     } catch (err) {
