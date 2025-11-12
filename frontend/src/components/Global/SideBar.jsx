@@ -3,7 +3,7 @@ import axios from "axios";
 import { HomeIcon, BriefcaseIcon, BarChartIcon, SettingsIcon, LogOutIcon, MenuIcon, XIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({ openSideBar, setOpenSideBar }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -36,20 +36,23 @@ export default function Sidebar() {
     <>
       {/* 🖥️ Desktop Sidebar */}
       <aside
-        className={`hidden md:flex flex-col bg-[#004030] text-white transition-all duration-300 h-screen
-        ${open ? "w-64" : "w-20"}`}
+        className={`hidden md:flex fixed top-0 left-0 flex-col bg-[#004030] text-white transition-all duration-300 h-screen
+  ${openSideBar ? "w-64" : "w-20"} z-40`}
       >
         {/* Header / Logo */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#4A9782]/40">
           <div
             className={`flex items-center transition-all duration-300 ${
-              open ? "opacity-100 scale-100" : "opacity-0 scale-0 w-0"
+              openSideBar ? "opacity-100 scale-100" : "opacity-0 scale-0 w-0"
             }`}
           >
             <h1 className="font-bold text-xl tracking-wide text-[#DCD0A8] whitespace-nowrap">UBRA</h1>
           </div>
 
-          <button onClick={() => setOpen(!open)} className="p-2 hover:bg-[#00674f] rounded-lg transition ml-auto">
+          <button
+            onClick={() => setOpenSideBar(!openSideBar)}
+            className="p-2 hover:bg-[#00674f] rounded-lg transition ml-auto"
+          >
             <MenuIcon className="w-6 h-6 text-[#DCD0A8]" />
           </button>
         </div>
@@ -61,7 +64,7 @@ export default function Sidebar() {
             alt="Profile"
             className="w-10 h-10 rounded-full object-cover border border-[#4A9782]"
           />
-          <div className={`flex flex-col transition-all duration-300 ${!open && "opacity-0 scale-0"}`}>
+          <div className={`flex flex-col transition-all duration-300 ${!openSideBar && "opacity-0 scale-0"}`}>
             <span className="font-semibold text-sm text-[#FFF9E5]">{user?.name || "Loading..."}</span>
             <span className="text-xs text-gray-400">{user?.email || "Fetching user..."}</span>
           </div>
@@ -69,15 +72,15 @@ export default function Sidebar() {
 
         {/* Links */}
         <nav className="flex-1 mt-6 space-y-2">
-          <SidebarLink open={open} icon={<HomeIcon />} label="Dashboard" />
-          <SidebarLink open={open} icon={<BriefcaseIcon />} label="My Jobs" />
-          <SidebarLink open={open} icon={<BarChartIcon />} label="Statistics" />
-          <SidebarLink open={open} icon={<SettingsIcon />} label="Settings" />
+          <SidebarLink open={openSideBar} icon={<HomeIcon />} label="Dashboard" />
+          <SidebarLink open={openSideBar} icon={<BriefcaseIcon />} label="My Jobs" />
+          <SidebarLink open={openSideBar} icon={<BarChartIcon />} label="Statistics" />
+          <SidebarLink open={openSideBar} icon={<SettingsIcon />} label="Settings" />
         </nav>
 
         {/* Footer */}
         <div className="px-5 py-4 border-t border-[#4A9782]/40">
-          <SidebarLink open={open} icon={<LogOutIcon />} label="Logout" onClick={handleLogout} />
+          <SidebarLink open={openSideBar} icon={<LogOutIcon />} label="Logout" onClick={handleLogout} />
         </div>
       </aside>
 

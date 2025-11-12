@@ -14,6 +14,7 @@ import UpdateJobModal from "../components/Home/Modal/UpdateJobModal";
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
   const [stats, setStats] = useState([]);
+  const [openSideBar, setOpenSideBar] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -57,13 +58,22 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen bg-[#ffffff] text-[#1E293B]">
       {/* Sidebar */}
-      <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+      <Sidebar
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+        openSideBar={openSideBar}
+        setOpenSideBar={setOpenSideBar}
+      />
 
       {/* Main */}
-      <main className="flex-1 overflow-y-auto px-8 py-6">
+      <main
+        className={`flex-1 overflow-y-auto px-8 py-6 transition-all duration-300 ${
+          openSideBar ? "md:ml-64" : "md:ml-20"
+        }`}
+      >
         <DashboardHeader onAddClick={() => setOpenModal(true)} />
         <StatusCards statusData={stats} />
-        <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} />
+        <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} openSideBar={openSideBar} />
 
         {openModal && (
           <AddJobModal
@@ -73,6 +83,7 @@ export default function HomePage() {
             statsUpdate={fetchStatsData}
           />
         )}
+
         {updateModal && (
           <UpdateJobModal
             jobDatas={selectedJob}
@@ -83,6 +94,7 @@ export default function HomePage() {
           />
         )}
       </main>
+
       <MobileNav onMenuToggle={() => setMobileOpen(true)} onAddClick={() => setOpenModal(true)} />
     </div>
   );
