@@ -3,6 +3,8 @@ import axios from "axios";
 import { HomeIcon, BriefcaseIcon, BarChartIcon, SettingsIcon, LogOutIcon, MenuIcon, XIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import SidebarLink from "./SideBarLink";
+
 export default function Sidebar({ openSideBar, setOpenSideBar }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
@@ -131,23 +133,5 @@ export default function Sidebar({ openSideBar, setOpenSideBar }) {
         </div>
       </aside>
     </>
-  );
-}
-
-function SidebarLink({ icon, label, open, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className="flex items-center gap-3 px-5 py-3 text-sm font-medium text-[#FFF9E5] hover:bg-[#4A9782]/30 transition rounded-lg mx-2 w-full text-left"
-    >
-      <span className="w-5 h-5">{icon}</span>
-      <span
-        className={`whitespace-nowrap transition-all duration-300 ${
-          open ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-5"
-        }`}
-      >
-        {label}
-      </span>
-    </button>
   );
 }
