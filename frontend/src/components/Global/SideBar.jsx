@@ -85,53 +85,6 @@ export default function Sidebar({ openSideBar, setOpenSideBar }) {
           <SidebarLink open={openSideBar} icon={<LogOutIcon />} label="Logout" onClick={handleLogout} />
         </div>
       </aside>
-
-      {/* 📱 Mobile Sidebar Overlay */}
-      <div
-        className={`fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden ${
-          mobileOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        onClick={() => setMobileOpen(false)}
-      />
-
-      <aside
-        className={`fixed top-0 left-0 z-50 h-full bg-[#004030] text-white transform transition-transform md:hidden
-        ${mobileOpen ? "translate-x-0" : "-translate-x-full"} w-64`}
-      >
-        {/* Mobile Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#4A9782]/40">
-          <h1 className="font-bold text-xl tracking-wide text-[#DCD0A8]">UBRA</h1>
-          <button onClick={() => setMobileOpen(false)} className="p-2 hover:bg-[#00674f] rounded-lg transition">
-            <XIcon className="w-6 h-6 text-[#DCD0A8]" />
-          </button>
-        </div>
-
-        {/* Profile */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#4A9782]/40">
-          <img
-            src={user?.picture || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
-            alt="Profile"
-            className="w-10 h-10 rounded-full object-cover border border-[#4A9782]"
-          />
-          <div className="flex flex-col">
-            <span className="font-semibold text-sm text-[#FFF9E5]">{user?.name || "Loading..."}</span>
-            <span className="text-xs text-gray-400">{user?.email || "Fetching user..."}</span>
-          </div>
-        </div>
-
-        {/* Links */}
-        <nav className="flex-1 mt-6 space-y-2">
-          <SidebarLink open={true} icon={<HomeIcon />} label="Dashboard" />
-          <SidebarLink open={true} icon={<BriefcaseIcon />} label="My Jobs" />
-          <SidebarLink open={true} icon={<BarChartIcon />} label="Statistics" />
-          <SidebarLink open={true} icon={<SettingsIcon />} label="Settings" />
-        </nav>
-
-        {/* Footer */}
-        <div className="px-5 py-4 border-t border-[#4A9782]/40">
-          <SidebarLink open={true} icon={<LogOutIcon />} label="Logout" onClick={handleLogout} />
-        </div>
-      </aside>
     </>
   );
 }
