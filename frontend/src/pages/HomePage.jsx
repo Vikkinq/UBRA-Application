@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 
+// General
 import Sidebar from "../components/Global/SideBar";
 import MobileNav from "../components/Global/MobileNav";
-import { SearchIcon, FilterIcon } from "lucide-react";
 
+// Main HomePage Contents
 import StatusCards from "../components/Home/StatusCards";
 import JobSection from "../components/Home/JobSection";
 import DashboardHeader from "../components/Home/Header";
 
+// Modals
 import AddJobModal from "../components/Home/Modal/AddJobModal";
 import UpdateJobModal from "../components/Home/Modal/UpdateJobModal";
 
