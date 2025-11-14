@@ -14,17 +14,33 @@ import UpdateJobModal from "../components/Home/Modal/UpdateJobModal";
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
   const [stats, setStats] = useState([]);
+
+  // Sidebar and Mobile
   const [openSideBar, setOpenSideBar] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Modals
   const [openModal, setOpenModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
-  const fetchJobs = async () => {
+  // Pagination Query
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 30; // or 40
+
+  const fetchJobs = async (page = 1) => {
     try {
-      const res = await fetch("/api/job/data");
+      const res = await fetch(`/api/job/data?page=${page}`);
       const jobData = await res.json();
-      setJobList(jobData);
+
+      if (page === 1) {
+        setJobList(jobData.jobList); // replace
+      } else {
+        setJobList((prev) => [...prev, ...jobData.jobList]); // append
+      }
+
+      setHasMore(jobData.hasMore);
     } catch (err) {
       console.log("Failed to fetch Jobs", err);
     }
@@ -40,6 +56,12 @@ export default function HomePage() {
     }
   };
 
+  const loadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchJobs(nextPage);
+  };
+
   const handleOpenModal = (job) => {
     setSelectedJob(job);
     setUpdateModal(true);
@@ -51,7 +73,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchJobs();
+    fetchJobs(1);
     fetchStatsData();
   }, []);
 
@@ -73,13 +95,19 @@ export default function HomePage() {
       >
         <DashboardHeader onAddClick={() => setOpenModal(true)} />
         <StatusCards statusData={stats} />
-        <JobSection jobDatas={jobList} onUpdateClick={handleOpenModal} openSideBar={openSideBar} />
+        <JobSection
+          jobDatas={jobList}
+          onUpdateClick={handleOpenModal}
+          openSideBar={openSideBar}
+          loadMore={loadMore}
+          hasMore={hasMore}
+        />
 
         {openModal && (
           <AddJobModal
             open={openModal}
             onClose={() => setOpenModal(false)}
-            onJobAdded={fetchJobs}
+            onJobAdded={() => fetchJobs(1)}
             statsUpdate={fetchStatsData}
           />
         )}
@@ -88,7 +116,7 @@ export default function HomePage() {
           <UpdateJobModal
             jobDatas={selectedJob}
             onClose={handleCloseModal}
-            onJobUpdate={fetchJobs}
+            onJobUpdate={() => fetchJobs(1)}
             onDelete={setJobList}
             statsUpdate={fetchStatsData}
           />

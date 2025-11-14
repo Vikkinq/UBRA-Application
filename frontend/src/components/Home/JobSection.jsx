@@ -2,7 +2,7 @@ import JobLists from "./JobLists";
 
 import UpdateJobModal from "./Modal/UpdateJobModal";
 
-export default function JobSection({ jobDatas, onUpdateClick, openSideBar }) {
+export default function JobSection({ jobDatas, onUpdateClick, openSideBar, hasMore, loadMore }) {
   return (
     <section>
       <div className="flex items-center justify-between mb-3">
@@ -13,6 +13,16 @@ export default function JobSection({ jobDatas, onUpdateClick, openSideBar }) {
           <JobLists key={i} JobLists={job} onClick={() => onUpdateClick(job)} />
         ))}
       </div>
+      {hasMore && (
+        <div className="p-4 flex justify-center mt-5">
+          <button
+            onClick={loadMore}
+            className="bg-[#004030] hover:bg-green-800 text-white font-semibold py-2 px-4 rounded"
+          >
+            Load More
+          </button>
+        </div>
+      )}
     </section>
   );
 }

@@ -3,8 +3,22 @@ const Job = require("../models/Job");
 const RenderJob = async (req, res, next) => {
   try {
     // console.log("Decoded User: ", req.user.id);
-    const jobList = await Job.find({ userId: req.user._id });
-    res.json(jobList);
+    // Get pagination values (defaults: page 1, limit 30)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 30;
+
+    const skip = (page - 1) * limit;
+
+    const jobList = await Job.find({ userId: req.user._id }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+    const total = await Job.countDocuments({ userId: req.user._id });
+    res.json({
+      jobList,
+      total,
+      skip,
+      page,
+      hasMore: page * limit < total,
+    });
   } catch (err) {
     next(err);
   }
