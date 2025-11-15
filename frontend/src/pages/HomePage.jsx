@@ -33,7 +33,7 @@ export default function HomePage() {
 
   const fetchJobs = async (page = 1) => {
     try {
-      const res = await fetch(`/api/job/data?page=${page}`);
+      const res = await fetch(`/api/job/data?page=${page}`); // Response Query Page
       const jobData = await res.json();
 
       if (page === 1) {
