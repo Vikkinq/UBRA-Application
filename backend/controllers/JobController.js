@@ -12,7 +12,11 @@ const RenderJob = async (req, res, next) => {
     let currentUser = { userId: req.user._id };
 
     if (search) {
-      currentUser.$or = [{ company: { $regex: search, $options: "i" } }, { role: { $regex: search, $options: "i" } }];
+      currentUser.$or = [
+        { company: { $regex: search, $options: "i" } },
+        { role: { $regex: search, $options: "i" } },
+        { status: { $regex: search, $options: "i" } },
+      ];
     }
 
     const jobList = await Job.find(currentUser).sort({ createdAt: -1 }).skip(skip).limit(limit);

@@ -20,7 +20,9 @@ export default function DashboardHeader({ username, onAddClick, handleSearch }) 
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       {/* Title */}
-      <h1 className="text-2xl font-bold tracking-tight text-[#004030] text-center sm:text-left">UBRA Job Tracker</h1>
+      <h1 className="text-2xl font-bold tracking-tight text-[#004030] text-center sm:text-left">
+        Track your Applied Jobs Now!
+      </h1>
 
       {/* Actions */}
       <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
