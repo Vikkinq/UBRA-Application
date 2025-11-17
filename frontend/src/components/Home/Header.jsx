@@ -42,10 +42,10 @@ export default function DashboardHeader({ username, onAddClick, handleSearch }) 
         </div>
 
         {/* Filter Button */}
-        <button className="flex items-center justify-center gap-2 bg-[#4A9782] text-white px-4 py-2 rounded-lg hover:bg-[#3c836e] transition shadow-sm active:scale-95">
+        {/* <button className="flex items-center justify-center gap-2 bg-[#4A9782] text-white px-4 py-2 rounded-lg hover:bg-[#3c836e] transition shadow-sm active:scale-95">
           <FilterIcon className="w-5 h-5" />
           <span className="hidden sm:inline font-medium">Filter</span>
-        </button>
+        </button> */}
 
         {/* Add Job Button */}
         <button

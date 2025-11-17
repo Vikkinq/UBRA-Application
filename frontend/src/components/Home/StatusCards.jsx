@@ -12,16 +12,19 @@ export default function StatusCards({ statusData = [] }) {
   // Only include statuses you want to display
   const allStatuses = ["Applied", "Interview Scheduled", "Offer Received", "Rejected"];
 
+  const random = Math.floor(Math.random() * 50) + 1;
+
   // Merge backend data with predefined metadata
   const formattedData = allStatuses.map((status) => {
     const found = statusData.find((s) => s._id === status || s.title === status);
     const meta = statusMeta[status];
+    const random = Math.floor(Math.random() * 5) + 1;
     return {
       title: status,
       count: found ? found.count : 0,
       color: meta.color,
       icon: meta.icon,
-      change: "+1%", // Optional placeholder
+      change: `+${random}%`, // Optional placeholder
     };
   });
 
