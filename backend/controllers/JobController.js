@@ -6,12 +6,18 @@ const RenderJob = async (req, res, next) => {
     // Get pagination values (defaults: page 1, limit 30)
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 30;
-
+    const search = req.query.sq || "";
     const skip = (page - 1) * limit;
 
-    const jobList = await Job.find({ userId: req.user._id }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+    let currentUser = { userId: req.user._id };
 
-    const total = await Job.countDocuments({ userId: req.user._id });
+    if (search) {
+      currentUser.$or = [{ company: { $regex: search, $options: "i" } }, { role: { $regex: search, $options: "i" } }];
+    }
+
+    const jobList = await Job.find(currentUser).sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+    const total = await Job.countDocuments(currentUser);
     res.json({
       jobList,
       total,

@@ -1,6 +1,22 @@
 import { SearchIcon, FilterIcon, PlusIcon } from "lucide-react";
 
-export default function DashboardHeader({ username, onAddClick}) {
+import { useFormHandler } from "../../utilities/formHandlers";
+
+export default function DashboardHeader({ username, onAddClick, handleSearch }) {
+  const { formData, handleChange, resetForm } = useFormHandler({
+    search: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    try {
+      handleSearch(formData.search);
+    } catch (err) {
+      console.log("Error");
+    }
+  };
+
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       {/* Title */}
@@ -11,11 +27,16 @@ export default function DashboardHeader({ username, onAddClick}) {
         {/* Search */}
         <div className="relative flex-1 sm:flex-initial w-full sm:w-64">
           <SearchIcon className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4A9782] focus:border-[#4A9782] outline-none bg-white text-gray-800 text-sm"
-          />
+          <form onSubmit={handleSubmit}>
+            <input
+              name="search"
+              value={formData.search}
+              onChange={handleChange}
+              type="text"
+              placeholder="Search jobs..."
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4A9782] focus:border-[#4A9782] outline-none bg-white text-gray-800 text-sm"
+            />
+          </form>
         </div>
 
         {/* Filter Button */}

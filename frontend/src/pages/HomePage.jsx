@@ -28,12 +28,14 @@ export default function HomePage() {
 
   // Pagination Query
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState();
+  const [filter, setFilter] = useState();
   const [hasMore, setHasMore] = useState(true);
   const LIMIT = 30; // or 40
 
-  const fetchJobs = async (page = 1) => {
+  const fetchJobs = async (page = 1, searchQuery = "") => {
     try {
-      const res = await fetch(`/api/job/data?page=${page}`); // Response Query Page
+      const res = await fetch(`/api/job/data?page=${page}&sq=${searchQuery}`); // Response Query Page
       const jobData = await res.json();
 
       if (page === 1) {
@@ -61,7 +63,11 @@ export default function HomePage() {
   const loadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    fetchJobs(nextPage);
+    fetchJobs(nextPage, search);
+  };
+
+  const handleSearch = (query) => {
+    setSearch(query);
   };
 
   const handleOpenModal = (job) => {
@@ -75,9 +81,9 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchJobs(1);
+    fetchJobs(1, search);
     fetchStatsData();
-  }, []);
+  }, [search]);
 
   return (
     <div className="flex min-h-screen bg-[#ffffff] text-[#1E293B]">
@@ -95,7 +101,7 @@ export default function HomePage() {
           openSideBar ? "md:ml-64" : "md:ml-20"
         }`}
       >
-        <DashboardHeader onAddClick={() => setOpenModal(true)} />
+        <DashboardHeader onAddClick={() => setOpenModal(true)} handleSearch={handleSearch} />
         <StatusCards statusData={stats} />
         <JobSection
           jobDatas={jobList}
