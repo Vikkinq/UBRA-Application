@@ -12,6 +12,8 @@ import DashboardHeader from "../components/Home/Header";
 // Modals
 import AddJobModal from "../components/Home/Modal/AddJobModal";
 import UpdateJobModal from "../components/Home/Modal/UpdateJobModal";
+import FilterModal from "../components/Home/Modal/FilterModal";
+import { Filter } from "lucide-react";
 
 export default function HomePage() {
   const [jobList, setJobList] = useState([]);
@@ -24,13 +26,14 @@ export default function HomePage() {
   // Modals
   const [openModal, setOpenModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
   // Pagination Query
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState();
-  const [filter, setFilter] = useState();
   const [hasMore, setHasMore] = useState(true);
+  const [filter, setFilter] = useState();
   const LIMIT = 30; // or 40
 
   const fetchJobs = async (page = 1, searchQuery = "") => {
@@ -78,6 +81,7 @@ export default function HomePage() {
   const handleCloseModal = () => {
     setSelectedJob(null);
     setUpdateModal(false);
+    setOpenFilter(false);
   };
 
   useEffect(() => {
@@ -101,7 +105,11 @@ export default function HomePage() {
           openSideBar ? "md:ml-64" : "md:ml-20"
         }`}
       >
-        <DashboardHeader onAddClick={() => setOpenModal(true)} handleSearch={handleSearch} />
+        <DashboardHeader
+          onAddClick={() => setOpenModal(true)}
+          handleSearch={handleSearch}
+          openFilter={() => setOpenFilter(true)}
+        />
         <StatusCards statusData={stats} />
         <JobSection
           jobDatas={jobList}
@@ -129,6 +137,8 @@ export default function HomePage() {
             statsUpdate={fetchStatsData}
           />
         )}
+
+        {openFilter && <FilterModal onClose={handleCloseModal} />}
       </main>
 
       <MobileNav onMenuToggle={() => setMobileOpen(true)} onAddClick={() => setOpenModal(true)} />
