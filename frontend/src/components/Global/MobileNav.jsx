@@ -20,7 +20,7 @@ export default function MobileNav({ onAddClick }) {
 
   return (
     <nav className="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.1)] flex justify-around items-center py-2 md:hidden z-50">
-      {/* Home */}
+      {/* Home Page */}
       <button
         onClick={() => navigate("/")}
         className={`flex flex-col items-center text-xs ${isActive("/") ? "text-[#004030]" : "text-gray-500"}`}
