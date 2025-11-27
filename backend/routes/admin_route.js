@@ -8,7 +8,7 @@ router.get("/users", async (req, res, next) => {
   try {
     const findUsers = await User.find({}).sort({ createdAt: -1 });
 
-    const userDocuments = await Job.countDocuments();
+    const userDocuments = await User.countDocuments();
 
     res.json(findUsers);
   } catch (err) {
