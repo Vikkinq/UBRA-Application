@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 
+import UserTableSection from "../components/Admin/UserTableSection";
+
 export default function AdminPage() {
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState([]);
 
   const fetchUsers = async () => {
     try {
@@ -17,5 +19,8 @@ export default function AdminPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
-  return <div>Admin</div>;
+  return (
+    // Contents
+    <UserTableSection userData={userData} />
+  );
 }
