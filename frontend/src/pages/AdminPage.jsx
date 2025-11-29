@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 
 import UserTableSection from "../components/Admin/UserTableSection";
+import Sidebar from "../components/Global/SideBar";
 
 export default function AdminPage() {
   const [userData, setUserData] = useState([]);
+
+  // Sidebar and Mobile
+  const [openSideBar, setOpenSideBar] = useState(true);
 
   const fetchUsers = async () => {
     try {
@@ -21,6 +25,11 @@ export default function AdminPage() {
   }, []);
   return (
     // Contents
-    <UserTableSection userData={userData} />
+    <div className="flex min-h-screen bg-[#ffffff] text-[#1E293B]">
+      {/* Sidebar */}
+      <Sidebar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />
+
+      <UserTableSection userData={userData} />
+    </div>
   );
 }
